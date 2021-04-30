@@ -12,7 +12,6 @@ metadata:
   annotations:
   {{ toYaml .Values.istio.baremetalblog.annotations | indent 2 }}
   {{- end }}
-
 spec:
   {{- range .Values.istio.baremetalblog.gateways }}
   gateways:
@@ -22,14 +21,11 @@ spec:
   hosts:
     - {{ tpl . $ }}
   {{- end }}
-  {{ $tcp := include "check-if-there-are-tcp-ports" (list .Values.service.ports ) }}
-  {{- if gt (len $tcp) 0 -}}
   tcp:
-  {{- end }}
   {{- range .Values.service.ports }}
   {{- if eq .protocol "TCP"}}
     - match:
-      - port: {{ .tcpPort }}
+      - port: {{ .port }}
       route:
         - destination:
             port:
@@ -37,16 +33,13 @@ spec:
             host: {{ include "baremetalblog.fullname" $ }}
   {{- end }}
   {{- end }}
-  {{ $http := include "check-if-there-are-http-ports" (list .Values.service.ports ) }}
-  {{- if gt (len $http) 0 -}}
+  {{- range .Values.services }}
   http:
-  {{- end }}
-  {{- range .Values.service.ports}}
   {{- if eq .protocol "HTTP" }}
     - route:
         - destination:
             port:
-              number: {{ .containerPort }}
+              number: {{ .port }}
             host: {{ include "baremetalblog.fullname" $ }}
   {{- end }}
   {{- end }}
