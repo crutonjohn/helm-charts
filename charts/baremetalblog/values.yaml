@@ -30,6 +30,17 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+istio:
+  enabled: false
+  baremetalblog:
+    enabled: true
+    annotations: {}
+    labels: {}
+    gateways:
+      - istio-system/main
+    hosts:
+      - chart-example.local
+
 service:
   type: ClusterIP
   port: 80

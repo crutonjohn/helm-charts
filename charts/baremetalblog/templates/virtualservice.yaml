@@ -1,0 +1,53 @@
+{{- if and .Values.istio.enabled .Values.istio.baremetalblog.enabled -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: baremetalblog
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.istio.baremetalblog.labels }}
+  labels:
+  {{ toYaml .Values.istio.baremetalblog.labels | indent 2 }}
+  {{- end }}
+  {{- if .Values.istio.baremetalblog.annotations }}
+  annotations:
+  {{ toYaml .Values.istio.baremetalblog.annotations | indent 2 }}
+  {{- end }}
+
+spec:
+  {{- range .Values.istio.baremetalblog.gateways }}
+  gateways:
+    - {{ . }}
+  {{- end }}
+  {{- range .Values.istio.baremetalblog.hosts }}
+  hosts:
+    - {{ tpl . $ }}
+  {{- end }}
+  {{ $tcp := include "check-if-there-are-tcp-ports" (list .Values.service.ports ) }}
+  {{- if gt (len $tcp) 0 -}}
+  tcp:
+  {{- end }}
+  {{- range .Values.service.ports }}
+  {{- if eq .protocol "TCP"}}
+    - match:
+      - port: {{ .tcpPort }}
+      route:
+        - destination:
+            port:
+              number: {{ .containerPort }}
+            host: {{ include "baremetalblog.fullname" $ }}
+  {{- end }}
+  {{- end }}
+  {{ $http := include "check-if-there-are-http-ports" (list .Values.service.ports ) }}
+  {{- if gt (len $http) 0 -}}
+  http:
+  {{- end }}
+  {{- range .Values.service.ports}}
+  {{- if eq .protocol "HTTP" }}
+    - route:
+        - destination:
+            port:
+              number: {{ .containerPort }}
+            host: {{ include "baremetalblog.fullname" $ }}
+  {{- end }}
+  {{- end }}
+{{- end }}
