@@ -33,7 +33,7 @@ securityContext: {}
 istio:
   enabled: false
   baremetalblog:
-    enabled: true
+    enabled: false
     annotations: {}
     labels: {}
     gateways:
