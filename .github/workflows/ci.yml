@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'charts/**'
+      - '.github/**'
 
 jobs:
   lint-chart:
@@ -31,18 +32,13 @@ jobs:
     needs:
       - lint-chart
       - lint-docs
-    strategy:
-      matrix:
-        k8s:
-          - v1.19.4
-          - v1.20.0
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Run kubeval
-        env:
-          KUBERNETES_VERSION: ${{ matrix.k8s }}
-        run: .github/kubeval.sh
+    - uses: actions/checkout@master
+    - name: test
+      uses: desaintmartin/helm-kubeval-action@master
+      with:
+        path: ./charts
+#        config: ./config_repos
 
   install-chart:
     name: install-chart
