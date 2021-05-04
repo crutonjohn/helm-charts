@@ -3,6 +3,16 @@ entries:
   baremetalblog:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2021-05-04T00:35:24.105525111Z"
+    description: Deploys Hugo Static Blog
+    digest: 630582bbd4ff247feb30187cd38650fd923a0e7546b61ae7c57650b347d4ae70
+    name: baremetalblog
+    type: application
+    urls:
+    - https://github.com/crutonjohn/helm-charts/releases/download/baremetalblog-0.1.1/baremetalblog-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2021-01-10T03:37:53.426062827Z"
     description: Deploys Hugo Static Blog
     digest: da6ed68af77c13bcaef03bf8c0b29057a9f8a4438bfdf6150f44124c0b59380c
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/crutonjohn/helm-charts/releases/download/baremetalblog-0.1.0/baremetalblog-0.1.0.tgz
     version: 0.1.0
-generated: "2021-01-10T03:37:53.330326116Z"
+generated: "2021-05-04T00:35:24.105536411Z"
